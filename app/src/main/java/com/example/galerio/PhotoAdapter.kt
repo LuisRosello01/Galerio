@@ -26,9 +26,9 @@ class PhotoAdapter(private val photos: List<Photo>) : RecyclerView.Adapter<Photo
 
     override fun onBindViewHolder(holder: PhotoViewHolder, position: Int) {
         val photo = photos[position]
-        holder.titleView.text = photo.title
-        holder.dateView.text = SimpleDateFormat("dd/MM/yyyy", Locale.getDefault()).format(Date(photo.dateTaken))
-        Glide.with(holder.imageView.context).load(Uri.parse(photo.uri)).into(holder.imageView)
+//        holder.titleView.text = photo.title
+//        holder.dateView.text = SimpleDateFormat("dd/MM/yyyy", Locale.getDefault()).format(Date(photo.dateTaken))
+//        Glide.with(holder.imageView.context).load(Uri.parse(photo.uri)).into(holder.imageView)
     }
 
     override fun getItemCount() = photos.size
