@@ -8,12 +8,11 @@ import androidx.compose.material.icons.filled.MoreVert
 import androidx.compose.runtime.*
 import androidx.compose.material3.*
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalContext
 import com.example.galerio.permissions.RequestMediaPermissions
 
 // Función para mostrar la pantalla principal
 @Composable
-fun MyScreen(context: Context) {
+fun MyScreen(context: Context, onVideoClick: (Uri) -> Unit) {
     var selectedImageUri by remember { mutableStateOf<Uri?>(null) }
 
     Scaffold(
@@ -26,7 +25,7 @@ fun MyScreen(context: Context) {
                     selectedImageUri = uri
                 }
             } else {
-                FullScreenImage(imageUri = selectedImageUri) {
+                FullScreenMedia(mediaUri = selectedImageUri) {
                     selectedImageUri = null // Volver a la galería al cerrar la imagen completa
                 }
             }

@@ -1,17 +1,13 @@
-import android.net.Uri
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
-import com.bumptech.glide.Glide
 import com.example.galerio.R
-import com.example.galerio.data.model.Photo
-import java.text.SimpleDateFormat
-import java.util.*
+import com.example.galerio.data.model.MediaItem
 
-class PhotoAdapter(private val photos: List<Photo>) : RecyclerView.Adapter<PhotoAdapter.PhotoViewHolder>() {
+class PhotoAdapter(private val mediaItems: List<MediaItem>) : RecyclerView.Adapter<PhotoAdapter.PhotoViewHolder>() {
 
     class PhotoViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         val imageView: ImageView = view.findViewById(R.id.imageView)
@@ -25,11 +21,11 @@ class PhotoAdapter(private val photos: List<Photo>) : RecyclerView.Adapter<Photo
     }
 
     override fun onBindViewHolder(holder: PhotoViewHolder, position: Int) {
-        val photo = photos[position]
+        val photo = mediaItems[position]
 //        holder.titleView.text = photo.title
 //        holder.dateView.text = SimpleDateFormat("dd/MM/yyyy", Locale.getDefault()).format(Date(photo.dateTaken))
 //        Glide.with(holder.imageView.context).load(Uri.parse(photo.uri)).into(holder.imageView)
     }
 
-    override fun getItemCount() = photos.size
+    override fun getItemCount() = mediaItems.size
 }

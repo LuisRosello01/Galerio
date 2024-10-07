@@ -1,17 +1,26 @@
 package com.example.galerio
 
 import android.app.Activity
+import android.net.Uri
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.ComposeView
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.viewinterop.AndroidView
+import androidx.navigation.NavType
+import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.composable
+import androidx.navigation.compose.rememberNavController
+import androidx.navigation.navArgument
 import com.example.galerio.ui.MyScreen
+import com.example.galerio.ui.VideoPlayerScreen
 
 class MainActivity : ComponentActivity() {
 
@@ -20,38 +29,35 @@ class MainActivity : ComponentActivity() {
         //setContentView(R.layout.activity_main)
 
         setContent {
-            MyScreen(context = this)
+            Surface(
+                modifier= Modifier.fillMaxSize(),
+                color = MaterialTheme.colorScheme.background
+            ) {
+                AppNavigation()
+            }
         }
     }
 }
 
-// Función de vista previa para mostrar la pantalla
-@Preview(showBackground = true)
 @Composable
-fun PreviewMyScreen() {
-        ActivityPreview {
-            MyScreen(context = LocalContext.current)
-        }
-}
+fun AppNavigation() {
+    val navController = rememberNavController()
 
-@Composable
-fun ActivityPreview(content: @Composable () -> Unit) {
-    val activity = LocalContext.current as? Activity
-    if (activity != null) {
-        AndroidView(
-            factory = { context ->
-                ComposeView(context).apply {
-                    setContent {
-                        content()
-                    }
-                }
-            },
-            modifier = Modifier.fillMaxSize(),
-            update = {
-                it.setContent {
-                    content()
-                }
+    NavHost(navController, startDestination = "media_list") {
+        composable("media_list") {
+            MyScreen(context = LocalContext.current) { videoUri ->
+                navController.navigate("video_player?uri=$videoUri")
             }
-        )
+        }
+
+        composable(
+            "video_player?uri={uri}",
+            arguments = listOf(navArgument("uri") { type = NavType.StringType })
+        ) { backStackEntry ->
+            val uri = Uri.parse(backStackEntry.arguments?.getString("uri"))
+            VideoPlayerScreen(videoUri = uri) {
+                navController.popBackStack()
+            }
+        }
     }
 }
