@@ -36,7 +36,7 @@ fun FullScreenImage(imageUri: Uri?, onDismiss: () -> Unit) {
     Box(
         modifier = Modifier
             .fillMaxSize()
-            .background(Color.Black)
+            .background(Color.Black.copy(alpha = calculateAlpha(offset)))
             .pointerInput(Unit) {
                 detectDragGestures(
                     onDragEnd = {
@@ -81,3 +81,18 @@ fun FullScreenImage(imageUri: Uri?, onDismiss: () -> Unit) {
         scale = 1f
     }
 }
+// Función para calcular la transparencia en función del desplazamiento
+fun calculateAlpha(offset: Offset): Float {
+    // Calcula la distancia desde el origen
+    val distance = offset.getDistance()
+
+    // Normaliza la distancia para que la transparencia varíe de 0.3 a 1.0 (por ejemplo)
+    // Suponiendo que 300 píxeles es el máximo que deseas arrastrar
+    val maxDistance = 300f
+    return 1f - (distance / maxDistance).coerceIn(0f, 1f) // El mínimo alpha será 0.3
+}
+
+// Función de extensión para obtener la distancia
+//fun Offset.getDistance(): Float {
+//    return sqrt(x * x + y * y)
+//}
