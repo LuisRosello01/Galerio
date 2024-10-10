@@ -1,6 +1,5 @@
 package com.example.galerio
 
-import android.app.Activity
 import android.net.Uri
 import android.os.Bundle
 import androidx.activity.ComponentActivity
@@ -10,16 +9,13 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.ComposeView
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.viewinterop.AndroidView
 import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
-import com.example.galerio.ui.MyScreen
+import com.example.galerio.ui.MainScreen
 import com.example.galerio.ui.VideoPlayerScreen
 
 class MainActivity : ComponentActivity() {
@@ -45,7 +41,7 @@ fun AppNavigation() {
 
     NavHost(navController, startDestination = "media_list") {
         composable("media_list") {
-            MyScreen(context = LocalContext.current) { videoUri ->
+            MainScreen(context = LocalContext.current) { videoUri ->
                 navController.navigate("video_player?uri=$videoUri")
             }
         }

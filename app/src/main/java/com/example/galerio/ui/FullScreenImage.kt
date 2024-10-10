@@ -3,6 +3,7 @@ package com.example.galerio.ui
 import android.net.Uri
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.gestures.detectDragGestures
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -17,6 +18,7 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.unit.dp
@@ -24,7 +26,7 @@ import coil.compose.rememberAsyncImagePainter
 import kotlinx.coroutines.launch
 
 @Composable
-fun FullScreenMedia(mediaUri: Uri?, onDismiss: () -> Unit) {
+fun FullScreenImage(imageUri: Uri?, onDismiss: () -> Unit) {
     var scale by remember { mutableStateOf(0.5f) } // Estado inicial de escala para el zoom-in/out
     var offset by remember { mutableStateOf(Offset.Zero) } // Para el desplazamiento
     val animatedScale by animateFloatAsState(targetValue = if (scale > 0.5f) scale else 1f) // Animación de escala
@@ -34,6 +36,7 @@ fun FullScreenMedia(mediaUri: Uri?, onDismiss: () -> Unit) {
     Box(
         modifier = Modifier
             .fillMaxSize()
+            .background(Color.Black)
             .pointerInput(Unit) {
                 detectDragGestures(
                     onDragEnd = {
@@ -62,10 +65,10 @@ fun FullScreenMedia(mediaUri: Uri?, onDismiss: () -> Unit) {
                     translationY = offset.y
                 ),
             shape = RoundedCornerShape(0.dp),
-            elevation = CardDefaults.cardElevation(4.dp)
+            colors = CardDefaults.cardColors(Color.Transparent)
         ) {
             Image(
-                painter = rememberAsyncImagePainter(model = mediaUri),
+                painter = rememberAsyncImagePainter(model = imageUri),
                 contentDescription = null,
                 //contentScale = ContentScale.Crop,
                 modifier = Modifier.fillMaxSize()

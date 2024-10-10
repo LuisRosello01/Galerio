@@ -23,7 +23,7 @@ import java.util.Locale
 
 // Función para mostrar la lista de imágenes en una cuadrícula
 @Composable
-fun MediaList(modifier: Modifier, context: Context, onImageClick: (Uri) -> Unit) {
+fun MediaList(modifier: Modifier, context: Context, onMediaClick: (Uri, MediaType) -> Unit) {
     val mediaItems = getDeviceMedia(context)
 
     // Agrupamos por fecha (utilizando la fecha tomada del media)
@@ -48,8 +48,10 @@ fun MediaList(modifier: Modifier, context: Context, onImageClick: (Uri) -> Unit)
 
             items(mediaForDate) { mediaItem ->
                 when (mediaItem.type) {
-                    MediaType.Image -> ImageCard(imageUri = mediaItem.uri, onClick = { onImageClick(mediaItem.uri) })
-                    MediaType.Video -> VideoCard(videoUri = mediaItem.uri, duration = mediaItem.duration, onClick = { onImageClick(mediaItem.uri) })
+                    MediaType.Image -> ImageCard(imageUri = mediaItem.uri,
+                        onClick = { onMediaClick(mediaItem.uri, mediaItem.type) })
+                    MediaType.Video -> VideoCard(videoUri = mediaItem.uri, duration = mediaItem.duration,
+                        onClick = { onMediaClick(mediaItem.uri, mediaItem.type) })
                 }
             }
         }
