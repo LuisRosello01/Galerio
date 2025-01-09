@@ -10,8 +10,8 @@ object MediaUtils {
     fun getDeviceMedia(context: Context): List<MediaItem> {
         val mediaList = mutableListOf<MediaItem>()
 
-        val imageProjection = arrayOf(MediaStore.Images.Media._ID, MediaStore.Images.Media.DATE_TAKEN, MediaStore.Images.Media.RELATIVE_PATH)
-        val videoProjection = arrayOf(MediaStore.Video.Media._ID, MediaStore.Video.Media.DATE_TAKEN, MediaStore.Video.Media.DURATION)
+        val imageProjection = arrayOf(MediaStore.Images.Media._ID, MediaStore.Images.Media.DATE_MODIFIED, MediaStore.Images.Media.RELATIVE_PATH)
+        val videoProjection = arrayOf(MediaStore.Video.Media._ID, MediaStore.Video.Media.DATE_MODIFIED, MediaStore.Video.Media.DURATION)
 
 //        val sortOrder = "${MediaStore.Files.FileColumns.DATE_ADDED} DESC"
 
@@ -20,20 +20,20 @@ object MediaUtils {
             imageProjection,
             null,
             null,
-            "${MediaStore.Images.Media.DATE_TAKEN} DESC"
+            "${MediaStore.Images.Media.DATE_MODIFIED} DESC"
         )
 
         imageQuery?.use { cursor ->
             val idColumn = cursor.getColumnIndexOrThrow(MediaStore.Images.Media._ID)
-            val dateColumn = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATE_TAKEN)
+            val dateColumn = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATE_MODIFIED)
             val path = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.RELATIVE_PATH)
             while (cursor.moveToNext()) {
                 val id = cursor.getLong(idColumn)
-                val dateTaken = cursor.getLong(dateColumn)
+                val dateModified = cursor.getLong(dateColumn)
                 val relativePath = cursor.getString(path)
                 val uri = ContentUris.withAppendedId(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, id)
 
-                mediaList.add(MediaItem(uri, MediaType.Image, dateTaken, relativePath))
+                mediaList.add(MediaItem(uri, MediaType.Image, dateModified, relativePath))
             }
         }
 
@@ -42,22 +42,22 @@ object MediaUtils {
             videoProjection,
             null,
             null,
-            "${MediaStore.Video.Media.DATE_TAKEN} DESC"
+            "${MediaStore.Video.Media.DATE_MODIFIED} DESC"
         )
 
         // Procesar los videos
         videoQuery?.use { cursor ->
             val idColumn = cursor.getColumnIndexOrThrow(MediaStore.Video.Media._ID)
-            val dateTakenColumn = cursor.getColumnIndexOrThrow(MediaStore.Video.Media.DATE_TAKEN)
+            val dateModifiedColumn = cursor.getColumnIndexOrThrow(MediaStore.Video.Media.DATE_MODIFIED)
             val durationColumn = cursor.getColumnIndexOrThrow(MediaStore.Video.Media.DURATION)
 
             while (cursor.moveToNext()) {
                 val id = cursor.getLong(idColumn)
-                val dateTaken = cursor.getLong(dateTakenColumn)
+                val dateModified = cursor.getLong(dateModifiedColumn)
                 val duration = cursor.getLong(durationColumn)
                 val uri = ContentUris.withAppendedId(MediaStore.Video.Media.EXTERNAL_CONTENT_URI, id)
 
-                mediaList.add(MediaItem(uri, MediaType.Video, dateTaken, null, duration))
+                mediaList.add(MediaItem(uri, MediaType.Video, dateModified, null, duration))
             }
         }
 

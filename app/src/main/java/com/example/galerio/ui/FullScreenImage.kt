@@ -21,8 +21,10 @@ import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.input.pointer.pointerInput
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import coil.compose.rememberAsyncImagePainter
+import coil.request.ImageRequest
 import kotlinx.coroutines.launch
 
 @Composable
@@ -30,6 +32,7 @@ fun FullScreenImage(imageUri: Uri?, onDismiss: () -> Unit) {
     var scale by remember { mutableStateOf(0.5f) } // Estado inicial de escala para el zoom-in/out
     var offset by remember { mutableStateOf(Offset.Zero) } // Para el desplazamiento
     val animatedScale by animateFloatAsState(targetValue = if (scale > 0.5f) scale else 1f) // Animación de escala
+    var isLoading by remember { mutableStateOf(true) } // Estado de carga de la imagen
 
     val scope = rememberCoroutineScope() // Para controlar la animación
 
@@ -55,6 +58,10 @@ fun FullScreenImage(imageUri: Uri?, onDismiss: () -> Unit) {
                 )
             }
     ) {
+        if (isLoading) {
+            Box(modifier = Modifier.fillMaxSize().background(Color.Black))
+        }
+
         Card(
             modifier = Modifier
                 .fillMaxSize()
@@ -68,7 +75,16 @@ fun FullScreenImage(imageUri: Uri?, onDismiss: () -> Unit) {
             colors = CardDefaults.cardColors(Color.Transparent)
         ) {
             Image(
-                painter = rememberAsyncImagePainter(model = imageUri),
+                painter = rememberAsyncImagePainter(
+                    model = ImageRequest.Builder(LocalContext.current)
+                        .data(imageUri)
+                        .crossfade(true)
+                        .listener(
+                            onError = { _, _ -> isLoading = false },
+                            onSuccess = { _, _ -> isLoading = false }
+                        )
+                        .build()
+                ),
                 contentDescription = null,
                 //contentScale = ContentScale.Crop,
                 modifier = Modifier.fillMaxSize()
@@ -91,8 +107,3 @@ fun calculateAlpha(offset: Offset): Float {
     val maxDistance = 300f
     return 1f - (distance / maxDistance).coerceIn(0f, 1f) // El mínimo alpha será 0.3
 }
-
-// Función de extensión para obtener la distancia
-//fun Offset.getDistance(): Float {
-//    return sqrt(x * x + y * y)
-//}

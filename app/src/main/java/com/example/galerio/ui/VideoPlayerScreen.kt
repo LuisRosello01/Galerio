@@ -3,6 +3,7 @@ package com.example.galerio.ui
 import android.net.Uri
 import android.view.ViewGroup
 import android.widget.FrameLayout
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
@@ -54,7 +55,7 @@ fun VideoPlayerScreen(videoUri: Uri, onBackPress: () -> Unit) {
                 )
             }
         },
-        modifier = Modifier.fillMaxSize()
+        modifier = Modifier.fillMaxSize().background(Color.Black)
     )
 
     // Botón de retroceso para cerrar el reproductor
